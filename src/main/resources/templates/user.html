@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<tbody>
+<tr th:each="user :${users}">
+    <td th:text=${user.id}></td>
+    <td th:text=${user.name}></td>
+    <td>                     带参数的传递。
+        <a th:href="@{/user/toupdate(id=${user.id})}" >修改</a>|
+        <a th:href="@{/user/del(id=${user.id})}" >删除</a>
+    </td>
+</tr>
+</tbody>
+
+</body>
+</html>

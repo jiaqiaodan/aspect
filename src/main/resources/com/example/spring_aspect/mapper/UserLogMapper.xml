@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.spring_aspect.mapper.UserLogMapper" >
+  <resultMap id="BaseResultMap" type="com.example.spring_aspect.entity.UserLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="re_type" property="reType" jdbcType="VARCHAR" />
+    <result column="re_method" property="reMethod" jdbcType="VARCHAR" />
+    <result column="param" property="param" jdbcType="VARCHAR" />
+    <result column="user" property="user" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, re_type, re_method, param, user, create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.spring_aspect.entity.UserLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectListByLog" parameterType="map" resultType="com.example.spring_aspect.entity.UserLog"  >
+      select  * from   user_log
+      <trim prefix="where" prefixOverrides="and" >
+         <if test="param.reType!=null and param.reType !=''">
+            and re_type =#{param.reType,VARCHAR}
+         </if>
+        <if test="param.reMethod!=null and param.reMethod !=''">
+          and re_method =#{param.reMethod,VARCHAR}
+        </if>
+        <if test="param.user!=null and param.user !=''">
+          and user =#{param.user,VARCHAR}
+        </if>
+        <if test="param.startTime!=null and param.startTime !=''">
+          and create_time  <![CDATA[ >=]]> #{param.startTime,VARCHAR}
+        </if>
+        <if test="param.endTime!=null and param.endTime !=''">
+          and create_time <![CDATA[ <=]]>#{param.endTime,VARCHAR}
+        </if>
+      </trim>
+
+
+
+  </select>
+
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.spring_aspect.entity.UserLogExample" >
+    delete from user_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.spring_aspect.entity.UserLog" >
+    insert into user_log ( re_type, re_method,
+      param, user, create_time
+      )
+    values ( #{reType,jdbcType=VARCHAR}, #{reMethod,jdbcType=VARCHAR},
+      #{param,jdbcType=VARCHAR}, #{user,jdbcType=VARCHAR},now()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.spring_aspect.entity.UserLog" >
+    insert into user_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="reType != null" >
+        re_type,
+      </if>
+      <if test="reMethod != null" >
+        re_method,
+      </if>
+      <if test="param != null" >
+        param,
+      </if>
+      <if test="user != null" >
+        user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="reType != null" >
+        #{reType,jdbcType=VARCHAR},
+      </if>
+      <if test="reMethod != null" >
+        #{reMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="param != null" >
+        #{param,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null" >
+        #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.spring_aspect.entity.UserLogExample" resultType="java.lang.Integer" >
+    select count(*) from user_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update user_log
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.reType != null" >
+        re_type = #{record.reType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reMethod != null" >
+        re_method = #{record.reMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.param != null" >
+        param = #{record.param,jdbcType=VARCHAR},
+      </if>
+      <if test="record.user != null" >
+        user = #{record.user,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update user_log
+    set id = #{record.id,jdbcType=INTEGER},
+      re_type = #{record.reType,jdbcType=VARCHAR},
+      re_method = #{record.reMethod,jdbcType=VARCHAR},
+      param = #{record.param,jdbcType=VARCHAR},
+      user = #{record.user,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.spring_aspect.entity.UserLog" >
+    update user_log
+    <set >
+      <if test="reType != null" >
+        re_type = #{reType,jdbcType=VARCHAR},
+      </if>
+      <if test="reMethod != null" >
+        re_method = #{reMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="param != null" >
+        param = #{param,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null" >
+        user = #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.spring_aspect.entity.UserLog" >
+    update user_log
+    set re_type = #{reType,jdbcType=VARCHAR},
+      re_method = #{reMethod,jdbcType=VARCHAR},
+      param = #{param,jdbcType=VARCHAR},
+      user = #{user,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
